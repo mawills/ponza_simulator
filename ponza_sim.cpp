@@ -45,9 +45,7 @@ int main()
   for(int i=0; i < NUM_TRIALS; i++) {
     vector<char> deck = initializeDeck(DECK_SIZE, NUM_LANDS, NUM_LD, NUM_RAMP);
     vector<char> hand;
-    int handSize = STARTING_HAND_SIZE;
     int countMulligan = 0;
-    
     
     while(countMulligan <= MAX_MULLIGANS) {
       int countRamp = 0;
@@ -57,12 +55,12 @@ int main()
       random_shuffle( deck.begin(), deck.end() );
 
       // Draw cards
-      for(int i= 0; i < handSize - countMulligan; i++) {
+      for(int i= 0; i < STARTING_HAND_SIZE - countMulligan; i++) {
         hand.push_back(deck[i]);
       }
 
       // Count the number of ramp, LD, and lands in the hand
-      for(int i= 0; i < handSize; i++) {
+      for(int i= 0; i < STARTING_HAND_SIZE; i++) {
         if (hand[i] == 'R') countRamp++;
         if (hand[i] == 'D') countLD++;
         if (hand[i] == 'L') countLands++;
