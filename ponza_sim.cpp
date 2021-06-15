@@ -26,17 +26,17 @@ const int NUM_FETCHLAND = 8;
 const int NUM_COLORLESS_LAND = 1;
 
 enum card {
-  ARBOR_ELF = 'a',
-  UTOPIA_SPRAWL = 'b',
-  BIRDS_OF_PARADISE = 'c',
-  PILLAGE = 'd',
-  BLOOD_MOON = 'e',
-  MAGUS_OF_THE_MOON = 'f',
-  FOREST = 'g',
-  MOUNTAIN = 'h',
-  STOMPING_GROUND = 'i',
-  FETCHLAND = 'j',
-  COLORLESS_LAND = 'k'
+  ARBOR_ELF,
+  UTOPIA_SPRAWL,
+  BIRDS_OF_PARADISE ,
+  PILLAGE,
+  BLOOD_MOON,
+  MAGUS_OF_THE_MOON,
+  FOREST,
+  MOUNTAIN,
+  STOMPING_GROUND,
+  FETCHLAND,
+  COLORLESS_LAND
 };
 
 // Returns an unshuffled deck of DECK_SIZE containing the cards from config
