@@ -8,20 +8,6 @@
 
 using namespace std;
 
-enum card {
-  ARBOR_ELF = 'a',
-  UTOPIA_SPRAWL = 'b',
-  BIRDS_OF_PARADISE = 'c',
-  PILLAGE = 'd',
-  BLOOD_MOON = 'e',
-  MAGUS_OF_THE_MOON = 'f',
-  FOREST = 'g',
-  MOUNTAIN = 'h',
-  STOMPING_GROUND = 'i',
-  FETCHLAND = 'j',
-  COLORLESS_LAND = 'k'
-};
-
 // Configuration
 const int DECK_SIZE = 60;
 const int STARTING_HAND_SIZE = 7;
@@ -38,6 +24,20 @@ const int NUM_MOUNTAIN = 1;
 const int NUM_STOMPING_GROUND = 2;
 const int NUM_FETCHLAND = 8;
 const int NUM_COLORLESS_LAND = 1;
+
+enum card {
+  ARBOR_ELF = 'a',
+  UTOPIA_SPRAWL = 'b',
+  BIRDS_OF_PARADISE = 'c',
+  PILLAGE = 'd',
+  BLOOD_MOON = 'e',
+  MAGUS_OF_THE_MOON = 'f',
+  FOREST = 'g',
+  MOUNTAIN = 'h',
+  STOMPING_GROUND = 'i',
+  FETCHLAND = 'j',
+  COLORLESS_LAND = 'k'
+};
 
 // Returns an unshuffled deck of DECK_SIZE containing the cards from config
 vector<char> initializeDeck()
@@ -201,7 +201,7 @@ int main()
 {
   srand(unsigned(time(0)));
 
-  runTests();
+  // runTests();
 
   vector<char> deck = initializeDeck();
   vector<char> hand;
