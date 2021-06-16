@@ -8,23 +8,6 @@
 
 using namespace std;
 
-// Configuration
-const int DECK_SIZE = 60;
-const int STARTING_HAND_SIZE = 7;
-const int MAX_MULLIGANS = 3;
-const int NUM_TRIALS = 100000;
-const int NUM_ARBOR_ELF = 4;
-const int NUM_UTOPIA_SPRAWL = 4;
-const int NUM_BOP = 2;
-const int NUM_PILLAGE = 4;
-const int NUM_BLOOD_MOON = 4;
-const int NUM_MAGUS_OF_THE_MOON = 2;
-const int NUM_FOREST = 8;
-const int NUM_MOUNTAIN = 1;
-const int NUM_STOMPING_GROUND = 2;
-const int NUM_FETCHLAND = 8;
-const int NUM_COLORLESS_LAND = 1;
-
 enum card {
   ARBOR_ELF,
   UTOPIA_SPRAWL,
@@ -39,52 +22,35 @@ enum card {
   COLORLESS_LAND
 };
 
+// Configuration
+const int DECK_SIZE = 60;
+const int STARTING_HAND_SIZE = 7;
+const int MAX_MULLIGANS = 3;
+const int NUM_TRIALS = 100000;
+map<card, int> decklist =
+{
+    { card::ARBOR_ELF, 4 },
+    { card::UTOPIA_SPRAWL, 4 },
+    { card::BIRDS_OF_PARADISE, 2 },
+    { card::PILLAGE, 4 },
+    { card::BLOOD_MOON, 4 },
+    { card::MAGUS_OF_THE_MOON, 2 },
+    { card::FOREST, 7 },
+    { card::MOUNTAIN, 1 },
+    { card::STOMPING_GROUND, 3 },
+    { card::FETCHLAND, 8 },
+    { card::COLORLESS_LAND, 1 },
+};
+
 // Returns an unshuffled deck of DECK_SIZE containing the cards from config
 vector<char> initializeDeck()
 {
   vector<char> deck;
-  for(int i=0; i < NUM_ARBOR_ELF; i++) {
-    deck.push_back(card::ARBOR_ELF);
-  }
 
-  for(int i=0; i < NUM_UTOPIA_SPRAWL; i++) {
-    deck.push_back(card::UTOPIA_SPRAWL);
-  }
-
-  for(int i=0; i < NUM_BOP; i++) {
-    deck.push_back(card::BIRDS_OF_PARADISE);
-  }
-
-  for(int i=0; i < NUM_PILLAGE; i++) {
-    deck.push_back(card::PILLAGE);
-  }
-
-  for(int i=0; i < NUM_BLOOD_MOON; i++) {
-    deck.push_back(card::BLOOD_MOON);
-  }
-
-  for(int i=0; i < NUM_MAGUS_OF_THE_MOON; i++) {
-    deck.push_back(card::MAGUS_OF_THE_MOON);
-  }
-
-  for(int i=0; i < NUM_FOREST; i++) {
-    deck.push_back(card::FOREST);
-  }
-
-  for(int i=0; i < NUM_MOUNTAIN; i++) {
-    deck.push_back(card::MOUNTAIN);
-  }
-
-  for(int i=0; i < NUM_STOMPING_GROUND; i++) {
-    deck.push_back(card::STOMPING_GROUND);
-  }
-
-  for(int i=0; i < NUM_FETCHLAND; i++) {
-    deck.push_back(card::FETCHLAND);
-  }
-
-  for(int i=0; i < NUM_COLORLESS_LAND; i++) {
-    deck.push_back(card::COLORLESS_LAND);
+  for (auto const& x : decklist) {
+    for (int i=0; i < x.second; i++) {
+      deck.push_back(x.first);
+    }
   }
 
   while (deck.size() < DECK_SIZE) {
@@ -97,7 +63,7 @@ vector<char> initializeDeck()
 // Returns true if the given hand will allow a turn-2 land destruction spell
 bool verifyHand(vector<char> hand)
 {
-  std::map<char,int> count;
+  map<char,int> count;
   for (int i= 0; i < STARTING_HAND_SIZE; ++i) {
     count[hand[i]]++;
   }
