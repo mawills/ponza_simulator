@@ -11,10 +11,12 @@ using namespace std;
 enum card {
   ARBOR_ELF,
   UTOPIA_SPRAWL,
-  BIRDS_OF_PARADISE ,
+  BIRDS_OF_PARADISE,
+  IGNOBLE_HIERARCH,
   PILLAGE,
   BLOOD_MOON,
   MAGUS_OF_THE_MOON,
+  STONE_RAIN,
   FOREST,
   MOUNTAIN,
   STOMPING_GROUND,
@@ -28,16 +30,18 @@ class Configuration
   public:
     const int DECK_SIZE = 60;
     const int STARTING_HAND_SIZE = 7;
-    const int MAX_MULLIGANS = 3;
+    const int MAX_MULLIGANS = 2;
     const int NUM_TRIALS = 10000;
     const map<card, int> DECKLIST =
     {
       { card::ARBOR_ELF, 4 },
       { card::UTOPIA_SPRAWL, 4 },
       { card::BIRDS_OF_PARADISE, 2 },
+      { card::IGNOBLE_HIERARCH, 0},
       { card::PILLAGE, 4 },
       { card::BLOOD_MOON, 4 },
       { card::MAGUS_OF_THE_MOON, 2 },
+      { card::STONE_RAIN, 0 },
       { card::FOREST, 7 },
       { card::MOUNTAIN, 1 },
       { card::STOMPING_GROUND, 3 },
@@ -92,6 +96,7 @@ class Hand
     const bool isRampSpellAvailable = (
       count[card::ARBOR_ELF] +
       count[card::UTOPIA_SPRAWL] +
+      count[card::IGNOBLE_HIERARCH] +
       count[card::BIRDS_OF_PARADISE] > 0);
     if (!isRampSpellAvailable) return false;
 
@@ -104,6 +109,7 @@ class Hand
     const bool isLandDestructionAvailable = (
       count[card::PILLAGE] +
       count[card::BLOOD_MOON] +
+      count[card::STONE_RAIN] +
       count[card::MAGUS_OF_THE_MOON] > 0);
     if (!isLandDestructionAvailable) return false;
 
@@ -120,6 +126,7 @@ class Hand
       count[card::STOMPING_GROUND] +
       count[card::FETCHLAND] +
       count[card::BIRDS_OF_PARADISE] +
+      count[card::IGNOBLE_HIERARCH] +
       count[card::UTOPIA_SPRAWL]);
 
     // Arbor Elf can count for a red source as long as a forest-land can tap for red
@@ -130,6 +137,7 @@ class Hand
     // If your only LD is Pillage, you will need two red sources
     if (count[card::BLOOD_MOON] == 0 &&
         count[card::MAGUS_OF_THE_MOON] == 0 &&
+        count[card::STONE_RAIN] == 0 &&
         count[card::PILLAGE] > 0 &&
         numRedSources < 2) return false;
     if (numRedSources < 1) return false;
@@ -189,6 +197,10 @@ void runTests()
   (test10.verifyHand() == true) ? (cout << "ok: ") : (cout << "fail: ");
   cout << "utopia sprawl + pillage + stomping ground + stomping ground\n";
 
+  Hand test11({ card::IGNOBLE_HIERARCH, card::STONE_RAIN, card::FOREST, card::COLORLESS_LAND });
+  (test11.verifyHand() == true) ? (cout << "ok: ") : (cout << "fail: ");
+  cout << "ignoble hierarch + stone rain + forest + colorless land\n";
+
   cout << "Tests complete." << '\n';
 }
 
@@ -201,27 +213,27 @@ int main()
 
   // runTests();
 
-  int goodHands = 0;
+  int countSuccessfulTrials = 0;
   for (int i=0; i < config.NUM_TRIALS; i++) {
-    int countMulligan = 0;
-    while (countMulligan <= config.MAX_MULLIGANS) {
+    int countMulligans = 0;
+    while (countMulligans <= config.MAX_MULLIGANS) {
       deck.shuffle();
-      hand.drawCards(deck, config.STARTING_HAND_SIZE - countMulligan);
+      hand.drawCards(deck, config.STARTING_HAND_SIZE - countMulligans);
 
       // If the hand is good, move on to next trial. If not, mulligan.
       if (hand.verifyHand()) {
-        goodHands++;
+        countSuccessfulTrials++;
         hand.cards.clear();
         break;
       } else {
-        countMulligan++;
+        countMulligans++;
         hand.cards.clear();
       }
     }
   }
 
-  double percent = 100.0 * goodHands / config.NUM_TRIALS;
-  cout << goodHands << '/' << config.NUM_TRIALS << " games with good starting hands. (" << percent << "%)";
+  double percent = 100.0 * countSuccessfulTrials / config.NUM_TRIALS;
+  cout << countSuccessfulTrials << '/' << config.NUM_TRIALS << " games with good starting hands. (" << percent << "%)";
 
   return 0;
 }
